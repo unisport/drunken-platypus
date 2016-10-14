@@ -1,0 +1,43 @@
+<div>
+    <h3>{{ issue.title }}</h3>
+</div>
+<div>
+    {{ issue.summary }}
+</div>
+<div>
+    <button type="button" data-action="edit">Edit</button>
+</div>
+<div>
+    <h4>Comments</h4>
+    <ul>
+        {% for comment in issue.comments %}
+            <li>{{ comment.summary }} - {{ comment.created_at }}</li>
+        {% endfor %}
+    </ul>
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="issue_id" value="{{ issue.id }}">
+        
+        {% for field in form %}
+            <div>
+                {{ field }}
+            </div>
+        {% endfor %}
+        <div>
+            <button type="button" data-action="comment">Post Comment</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    (function() {
+        document.querySelector('[data-action="edit"]').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.location = "{% url 'issue_edit' issue.id %}";
+        });
+        document.querySelector('[data-action="comment"]').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.location = "{% url 'comment_create' issue.id %}";
+        });
+    })();
+</script>

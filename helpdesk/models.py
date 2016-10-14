@@ -1,5 +1,7 @@
 from django.db import models
+from django.forms import ModelForm
 
+# Models
 class Issue(models.Model):
     OPEN = 'OPEN'
     RESOLVED = 'RESOLVED'
@@ -25,3 +27,28 @@ class Issue(models.Model):
         default = OPEN,
         max_length = 100
     )
+
+    def comments(self):
+        return Comment.objects.filter(issue_id=self.id).order_by('-created_at')
+
+    def most_recent(self):
+        # FIXME: Add the correct filtering
+        return self.objects.all()
+
+class Comment(models.Model):
+    summary = models.TextField()
+    # FIXME: Should be logged in user
+    author = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    issue = models.ForeignKey(Issue)
+
+# ModelForms
+class IssueForm(ModelForm):
+    class Meta:
+        model = Issue
+        fields = ['title', 'summary', 'status']
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['summary']
