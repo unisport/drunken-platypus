@@ -31,6 +31,10 @@ class Issue(models.Model):
     def comments(self):
         return Comment.objects.filter(issue_id=self.id).order_by('-created_at')
 
+    @property
+    def comment_count(self):
+        return Comment.objects.filter(issue_id=self.id).count()
+
     @staticmethod
     def most_recent():
         # FIXME: Add the correct filtering
@@ -48,8 +52,10 @@ class IssueForm(ModelForm):
     class Meta:
         model = Issue
         fields = ['title', 'summary', 'status']
+        fields_required = ['title', 'summary']
 
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ['summary']
+        fields_required = ['summary']

@@ -3,8 +3,9 @@
 
     {% for field in form %}
         <div>
-            <label>{{ field.label }}</label>
+            <label>{{ field.label }} {% if field.field.required %}<span>*</span>{% endif %}</label>
             {{ field }}
+            
         </div>
     {% endfor %}
 

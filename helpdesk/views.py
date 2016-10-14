@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 
 from .models import Issue, Comment, IssueForm, CommentForm
 
@@ -49,6 +50,12 @@ def comment_create(request, issue_id):
         comment.issue = issue
         comment.save()
     else:
-        raise Exception(form.errors)
+        """
+        Future me should implement the submit using ajax
+        return JsonResponse({'success': False,
+                      'errors': [(k, v[0]) for k, v in form.errors.items()]})
+        will return the error in a Json format
+        """
+        raise Exception('You have issues man!')
 
     return redirect('issue_show', issue_id)
