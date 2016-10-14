@@ -4,7 +4,7 @@ from .models import Issue, Comment, IssueForm, CommentForm
 
 def issueIndex(request):
     # Here we show a list of open issues
-    recent_issues = Issue.objects.order_by('-status', '-created_at').filter(status__in = [Issue.OPEN, Issue.ONHOLD, Issue.REOPENED])
+    recent_issues = Issue().most_recent()
 
     return render(request, 'helpdesk/issue_index.html', {'recent_issues' : recent_issues})
 
@@ -45,6 +45,10 @@ def commentCreate(request, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
     form = CommentForm(request.POST)
     if form.is_valid():
-        form.save()
+        comment = form.save(commit=False)
+        comment.issue = issue
+        comment.save()
+    else:
+        raise Exception(form.errors)
 
     return redirect('issue_show', issue_id)

@@ -28,12 +28,13 @@ class Issue(models.Model):
         max_length = 100
     )
 
-    def comments(self):
+    def comments():
         return Comment.objects.filter(issue_id=self.id).order_by('-created_at')
 
-    def most_recent(self):
+    @staticmethod
+    def most_recent():
         # FIXME: Add the correct filtering
-        return self.objects.all()
+        return Issue.objects.filter().order_by('-created_at')
 
 class Comment(models.Model):
     summary = models.TextField()
