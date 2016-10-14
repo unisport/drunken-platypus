@@ -28,7 +28,7 @@ class Issue(models.Model):
         max_length = 100
     )
 
-    def comments():
+    def comments(self):
         return Comment.objects.filter(issue_id=self.id).order_by('-created_at')
 
     @staticmethod
