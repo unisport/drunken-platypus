@@ -1,9 +1,38 @@
-<a href="{% url 'issue_create' %}">Create Issue</a>
-<ul>
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <a href="{% url 'issue_create' %}" class="btn btn-default">Create Issue</a>    
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-4">
+                <h4>Title</h4>
+            </div>
+            <div class="col-sm-2"><h4>Author</h4></div>
+            <div class="col-sm-2"><h4>Status</h4></div>
+            <div class="col-sm-2"><h4>When Created</h4></div>
+            <div class="col-sm-2"><h4>Replies</h4></div>
+        </div>
     {% for issue in recent_issues %}
-        <li>
-            <a href="{% url 'issue_show' issue.pk %}">{{ issue.title }}</a> - {{ issue.status }} - {{ issue.created_at|date:"m-d H:i" }}
-            <span>{{ issue.comment_count }}</span>
-        </li>
+        <div class="row">
+            <div class="col-sm-4">
+                <a href="{% url 'issue_show' issue.pk %}">{{ issue.title }}</a>
+            </div>
+            <div class="col-sm-2">{{ issue.author }}</div>
+            <div class="col-sm-2">{{ issue.status }}</div>
+            <div class="col-sm-2">{{ issue.created_at|naturaltime }}</div>
+            <div class="col-sm-2">
+                {% if issue.comment_count > 0 %}
+                    {{ issue.comment_count }}
+                {% endif %}
+            </div>
+        </div>
     {% endfor %}
-</ul>
+    </div>
+</div>
+{% endblock %}

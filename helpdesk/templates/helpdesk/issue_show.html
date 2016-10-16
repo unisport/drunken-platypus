@@ -1,34 +1,60 @@
-<div>
-    <a href="{% url 'issue_index' %}">Index</a>
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <a href="{% url 'issue_index' %}" class="btn btn-default">Index</a>    
+    </div>
 </div>
-<div>
-    <h3>{{ issue.title }}</h3>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h3>{{ issue.title }}</h3>
+    </div>    
 </div>
-<div>
-    {{ issue.summary }}
+<div class="row">
+    <div class="col-sm-12">
+        {{ issue.summary }}
+    </div>    
 </div>
-<div>
-    <button type="button" data-action="edit">Edit</button>
+
+<div class="row">
+    <div class="col-sm-12">
+        <button type="button" data-action="edit" class="btn btn-default">Edit</button>
+    </div>
 </div>
-<div>
-    <h4>Comments</h4>
-    <ul>
-        {% for comment in issue.comments %}
-            <li>{{ comment.summary }} - {{ comment.created_at }}</li>
-        {% endfor %}
-    </ul>
-    <form action="{% url 'comment_create' issue.id %}" method="post">
-        {% csrf_token %}
-        
-        {% for field in form %}
-            <div>
-                {{ field }}
-            </div>
-        {% endfor %}
-        <div>
-            <button type="submit" data-action="comment">Post Comment</button>
+<div class="row">
+    <div class="col-sm-12">
+        <h4>Comments</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+           <ul>
+                {% for comment in issue.comments %}
+                    <li>{{ comment.summary }} - {{ comment.created_at|naturaltime }}</li>
+                {% endfor %}
+            </ul> 
         </div>
-    </form>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <form action="{% url 'comment_create' issue.id %}" method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <button type="submit" data-action="comment" class="btn btn-default">Post Comment</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -39,3 +65,4 @@
         });
     })();
 </script>
+{% endblock %}

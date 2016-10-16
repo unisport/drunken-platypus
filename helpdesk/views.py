@@ -24,6 +24,14 @@ def issue_create(request):
         form = IssueForm(request.POST)
         if form.is_valid():
             form.save()
+        else:
+            """
+            Future me should implement the submit using ajax
+            return JsonResponse({'success': False,
+                          'errors': [(k, v[0]) for k, v in form.errors.items()]})
+            will return the error in a Json format
+            """
+            raise Exception('You have issues')
 
         return redirect('issue_index')
 
@@ -37,6 +45,14 @@ def issue_edit(request, issue_id):
         form = IssueForm(request.POST, instance = issue)
         if form.is_valid():
             form.save()
+        else:
+            """
+            Future me should implement the submit using ajax
+            return JsonResponse({'success': False,
+                          'errors': [(k, v[0]) for k, v in form.errors.items()]})
+            will return the error in a Json format
+            """
+            raise Exception('You have issues')
 
         return redirect('issue_index')
 

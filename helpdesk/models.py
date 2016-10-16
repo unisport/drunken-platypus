@@ -47,6 +47,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     issue = models.ForeignKey(Issue)
 
+
 # ModelForms
 class IssueForm(ModelForm):
     class Meta:
