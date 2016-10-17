@@ -57,7 +57,22 @@ class ChangeLog(models.Model):
     def most_recent():
         return ChangeLog.objects.order_by('-created_at')[0:5]
 
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    # FIXME: Make this a real user
+    author = models.CharField(max_length=100)
+    topics = models.CharField(max_length=255)
+
 # ModelForms
+class ArticleForm(ModelForm):
+    class Meta:
+        model = Article
+        fields = ['title', 'content', 'topics']
+        fields_required = ['title', 'content']
+
 class IssueForm(ModelForm):
     class Meta:
         model = Issue

@@ -91,3 +91,15 @@ def changelog_new(request):
     else:
         form = ChangeLogForm
         return render(request, 'helpdesk/changelog_form.html', {'form' : form})
+
+def article_new(request):
+    pass
+
+def article_index(request):
+    pass
+
+def article_show(request):
+    pass
+
+def article_exit(request):
+    pass
