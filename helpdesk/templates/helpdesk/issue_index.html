@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load humanize %}
+{% load helpdesk_extras %}
 
 {% block content %}
 <div class="row">
@@ -9,6 +10,20 @@
         <a href="{% url 'article_new' %}" class="btn btn-default">Create KB Article</a>
     </div>
 </div>
+
+{% for article in pinned_articles %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="alert alert-info" role="alert">
+            <h5><span class="glyphicon glyphicon-pushpin"></span> {{ article.title }}</h5>
+            {{ article.content }}
+            <a href="{% url 'article_show' article.pk %}">Read more</a>
+            {{ article.topics|make_labels }}
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 <div class="row">
     <div class="col-sm-12">
         <div class="row">
@@ -49,6 +64,23 @@
             </div>
         </div>        
     {% endfor %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4>Recent Knowledge Base Articles</h4>
+    {% for entry in recent_articles %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div>{{ entry.created_at|naturaltime }}</div>
+                <div>{{ entry.title }}</div>
+                <div>{{ entry.summary }}</div>
+                <div>{{ entry.topics|make_labels }}</div>
+            </div>
+        </div>        
+    {% endfor %}
+    <a href="{% url 'article_index' %}">View KB Articles</a>
     </div>
 </div>
 {% endblock %}

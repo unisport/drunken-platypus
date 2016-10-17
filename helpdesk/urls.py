@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'^kb/new/$', views.article_new, name='article_new'),
     url(r'^kb/$', views.article_index, name='article_index'),
     url(r'^kb/(?P<article_id>[0-9]+)/$', views.article_show, name='article_show'),
-    url(r'^kb/(?P<article_id>[0-9]+)/edit/$', views.article_exit, name='article_exit'),
+    url(r'^kb/(?P<article_id>[0-9]+)/edit/$', views.article_edit, name='article_edit'),
 ]

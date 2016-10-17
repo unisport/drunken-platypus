@@ -2,16 +2,20 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 import logging
 
-from .models import Issue, Comment, ChangeLog, IssueForm, CommentForm, ChangeLogForm
+from .models import Issue, Comment, ChangeLog, Article, IssueForm, CommentForm, ChangeLogForm, ArticleForm
 
 def issue_index(request):
     # Here we show a list of open issues
     recent_issues = Issue().most_recent()
     recent_changelogentries = ChangeLog().most_recent()
+    recent_articles = Article().most_recent()
+    pinned_articles = Article().pinned_articles()
 
     return render(request, 'helpdesk/issue_index.html', {
         'recent_issues' : recent_issues,
-        'recent_changelogentries' : recent_changelogentries
+        'recent_changelogentries' : recent_changelogentries,
+        'recent_articles' : recent_articles,
+        'pinned_articles' : pinned_articles
     })
 
 def issue_show(request, issue_id):
@@ -93,13 +97,31 @@ def changelog_new(request):
         return render(request, 'helpdesk/changelog_form.html', {'form' : form})
 
 def article_new(request):
-    pass
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.save()
+
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False,
+                'errors': [(k, v[0]) for k, v in form.errors.items()]
+            })
+    else:
+        form = ArticleForm
+
+    return render(request, 'helpdesk/article_form.html', { 'form' : form })
 
 def article_index(request):
-    pass
+    recent_articles = Article.most_recent_by_pinned()
 
-def article_show(request):
-    pass
+    return render(request, 'helpdesk/article_index.html', { 'recent_articles' : recent_articles })
 
-def article_exit(request):
+def article_show(request, article_id):
+    article = get_object_or_404(Article, pk=article_id)
+
+    return render(request, 'helpdesk/article_show.html', {'article': article})
+
+def article_edit(request):
     pass

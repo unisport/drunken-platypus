@@ -65,12 +65,25 @@ class Article(models.Model):
     # FIXME: Make this a real user
     author = models.CharField(max_length=100)
     topics = models.CharField(max_length=255)
+    pinned = models.BooleanField(default=False)
+
+    @staticmethod
+    def most_recent():
+        return Article.objects.filter(pinned=False).order_by('-created_at')[0:5]
+
+    @staticmethod
+    def most_recent_by_pinned():
+        return Article.objects.order_by('-created_at')
+
+    @staticmethod
+    def pinned_articles():
+        return Article.objects.order_by('-created_at')[0:5]
 
 # ModelForms
 class ArticleForm(ModelForm):
     class Meta:
         model = Article
-        fields = ['title', 'content', 'topics']
+        fields = ['title', 'content', 'topics', 'pinned']
         fields_required = ['title', 'content']
 
 class IssueForm(ModelForm):

@@ -65,6 +65,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'helpdesk_extras': 'helpdesk.templatetags.helpdesk_extras',
+            }
         },
     },
 ]
