@@ -5,6 +5,12 @@
 {% block content %}
 <div class="row">
     <div class="col-sm-12">
+        {% include './helpdesk/helpdesk_nav.html' %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
         {% for article in recent_articles %}
             <div class="row">
                 <div class="col-sm-12">

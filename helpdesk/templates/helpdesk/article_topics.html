@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        {% include './helpdesk/helpdesk_nav.html' %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4>Articles matching {{ topic }}</h4>
+    </div>
+</div>
+
+{% endblock %}

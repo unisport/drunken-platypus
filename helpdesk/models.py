@@ -77,7 +77,7 @@ class Article(models.Model):
 
     @staticmethod
     def pinned_articles():
-        return Article.objects.order_by('-created_at')[0:5]
+        return Article.objects.filter(pinned=True).order_by('-created_at')[0:5]
 
 # ModelForms
 class ArticleForm(ModelForm):

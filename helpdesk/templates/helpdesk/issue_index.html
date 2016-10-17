@@ -5,9 +5,7 @@
 {% block content %}
 <div class="row">
     <div class="col-sm-12">
-        <a href="{% url 'issue_create' %}" class="btn btn-default">Create Issue</a>
-        <a href="{% url 'changelog_new' %}" class="btn btn-default">Create ChangeLog Entry</a>
-        <a href="{% url 'article_new' %}" class="btn btn-default">Create KB Article</a>
+        {% include './helpdesk/helpdesk_nav.html' %}
     </div>
 </div>
 
@@ -17,8 +15,8 @@
         <div class="alert alert-info" role="alert">
             <h5><span class="glyphicon glyphicon-pushpin"></span> {{ article.title }}</h5>
             {{ article.content }}
-            <a href="{% url 'article_show' article.pk %}">Read more</a>
-            {{ article.topics|make_labels }}
+            <a href="{% url 'article_show' article.pk %}">Read more</a><br>
+            Topics: {% make_labels article.topics %}
         </div>
     </div>
 </div>
@@ -74,13 +72,12 @@
         <div class="row">
             <div class="col-sm-12">
                 <div>{{ entry.created_at|naturaltime }}</div>
-                <div>{{ entry.title }}</div>
-                <div>{{ entry.summary }}</div>
-                <div>{{ entry.topics|make_labels }}</div>
+                <div><h5>{{ entry.title }}</h5></a></div>
+                <div>{{ entry.content }}</div>
+                <div>{% make_labels entry.topics %}</div>
             </div>
         </div>        
     {% endfor %}
-    <a href="{% url 'article_index' %}">View KB Articles</a>
     </div>
 </div>
 {% endblock %}

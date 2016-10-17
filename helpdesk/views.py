@@ -123,5 +123,26 @@ def article_show(request, article_id):
 
     return render(request, 'helpdesk/article_show.html', {'article': article})
 
-def article_edit(request):
-    pass
+def article_edit(request, article_id):
+    article = get_object_or_404(Article, pk=article_id)
+
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.save()
+
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False,
+                'errors': [(k, v[0]) for k, v in form.errors.items()]
+            })
+    else:
+        form = ArticleForm(instance=article)
+
+    return render(request, 'helpdesk/article_form.html', {'form': form})
+
+def article_topic(request, topic):
+    articles = Article.objects.get(topics__icontains=topic)
+
+    return render(request, 'helpdesk/article_topics.html', {'articles': articles, 'topic': topic})

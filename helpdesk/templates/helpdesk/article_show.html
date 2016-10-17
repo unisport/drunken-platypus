@@ -4,24 +4,29 @@
 {% block content %}
 <div class="row">
     <div class="col-sm-12">
-        <a href="{% url 'issue_index' %}" class="btn btn-default">Index</a>    
+        {% include './helpdesk/helpdesk_nav.html' %}
     </div>
 </div>
 
 <div class="row">
     <div class="col-sm-12">
         <h3>{{ article.title }}</h3>
-    </div>
     <div class="row">
-        <div class="col-sm-3">
-            <span><span class="glyphicon glyphicon-user"></span>{{ article.author }}</span>
-            <span>Created {{ article.created_at|naturaltime }}</span>
-            <span>Updated {{ article.created_at|naturaltime }}</span>
+        <div class="col-sm-2">
+            <dl>
+                <dd>Updated: {{ article.created_at|naturaltime}}</dd>
+                <dd>Created: {{ article.created_at|naturaltime}}</dd>
+            </dl>
         </div>
-        <div class="col-sm-9">
+        <div class="col-sm-10">
+            <strong>By: {{ article.author }}</strong><br>
             {{ article.content }}
+            <div class="row">
+                <div class="col-sm-12">
+                    <a class="btn btn-primary" href="{% url 'article_edit' article.pk %}">Edit</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
