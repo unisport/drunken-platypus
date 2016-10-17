@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^(?P<issue_id>[0-9]+)/show/$', views.issue_show, name='issue_show'),
     url(r'^issue/new/$', views.issue_create, name='issue_create'),
     url(r'^issue/(?P<issue_id>[0-9]+)/edit/$', views.issue_edit, name='issue_edit'),
-    url(r'^issue/(?P<issue_id>[0-9]+)/comment/$', views.comment_create, name='comment_create')
+    url(r'^issue/(?P<issue_id>[0-9]+)/comment/$', views.comment_create, name='comment_create'),
+    url(r'^changelog/new/$', views.changelog_new, name='changelog_new')
 ]

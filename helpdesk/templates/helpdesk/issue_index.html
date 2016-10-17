@@ -4,7 +4,8 @@
 {% block content %}
 <div class="row">
     <div class="col-sm-12">
-        <a href="{% url 'issue_create' %}" class="btn btn-default">Create Issue</a>    
+        <a href="{% url 'issue_create' %}" class="btn btn-default">Create Issue</a>
+        <a href="{% url 'changelog_new' %}" class="btn btn-default">Create ChangeLog Entry</a>
     </div>
 </div>
 <div class="row">
@@ -32,6 +33,20 @@
                 {% endif %}
             </div>
         </div>
+    {% endfor %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4>Recent Changes</h4>
+    {% for entry in recent_changelogentries %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div>{{ entry.created_at|naturaltime }}</div>
+                <div>{{ entry.summary }}</div>
+            </div>
+        </div>        
     {% endfor %}
     </div>
 </div>

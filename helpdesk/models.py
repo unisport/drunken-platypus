@@ -2,7 +2,7 @@ from django.db import models
 from django.forms import ModelForm
 
 # Models
-class Issue(models.Model):
+class Issue( models.Model):
     OPEN = 'OPEN'
     RESOLVED = 'RESOLVED'
     REOPENED = 'REOPENED'
@@ -47,6 +47,15 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     issue = models.ForeignKey(Issue)
 
+class ChangeLog(models.Model):
+    summary = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    # FIXME: Has to be logged in user instead
+    author = models.CharField(max_length=100)
+
+    @staticmethod
+    def most_recent():
+        return ChangeLog.objects.order_by('-created_at')[0:5]
 
 # ModelForms
 class IssueForm(ModelForm):
@@ -60,3 +69,8 @@ class CommentForm(ModelForm):
         model = Comment
         fields = ['summary']
         fields_required = ['summary']
+
+class ChangeLogForm(ModelForm):
+    class Meta:
+        model = ChangeLog
+        fields = ['summary']

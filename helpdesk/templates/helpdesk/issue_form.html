@@ -21,3 +21,38 @@
     </div>
 </div>
 {% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    (function($) {
+        $('form').on('submit', function(event) {
+            event.preventDefault();
+
+            var f = $(this);
+            $.ajax({
+                type: f.attr('method'),
+                url: f.attr('action'),
+                data: f.serialize()
+            })
+            .done(function(resp) {
+                var m = '',
+                    c = ['alert'];
+                if (resp.success) {
+                    m = 'Way to go champ!';
+                    c.push('alert-success');
+                } else {
+                    m = 'You have issues!';
+                    c.push('alert-danger');
+                    console.log(resp.errors);
+                }
+
+                $('<div/>')
+                .attr('role', 'alert')
+                .addClass(c.join(' '))
+                .html(m)
+                .prependTo(f);
+            })
+        });
+    })(jQuery);
+</script>
+{% endblock %}
