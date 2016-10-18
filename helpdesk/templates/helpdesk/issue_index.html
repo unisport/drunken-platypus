@@ -34,9 +34,10 @@
             <div class="col-sm-2"><h4>Replies</h4></div>
         </div>
     {% for issue in recent_issues %}
-        <div class="row">
+        <div class="row" style="margin-bottom: 10px">
             <div class="col-sm-4">
-                <a href="{% url 'issue_show' issue.pk %}">{{ issue.title }}</a>
+                <a href="{% url 'issue_show' issue.pk %}">{{ issue.title|truncatewords:10 }}</a><br>
+                {{ issue.summary|truncatewords_html:10 }}
             </div>
             <div class="col-sm-2">{{ issue.author }}</div>
             <div class="col-sm-2">{{ issue.status }}</div>
@@ -54,30 +55,35 @@
 <div class="row">
     <div class="col-sm-12">
         <h4>Recent Changes</h4>
-    {% for entry in recent_changelogentries %}
         <div class="row">
-            <div class="col-sm-12">
-                <div>{{ entry.created_at|naturaltime }}</div>
+        {% for entry in recent_changelogentries %}
+            <div class="col-sm-4">
+                <div><span class="label label-default">Created: {{ entry.created_at|naturaltime }}</span></div>
                 <div>{{ entry.summary }}</div>
             </div>
-        </div>        
-    {% endfor %}
+        {% endfor %}
+        </div>
     </div>
 </div>
 
 <div class="row">
     <div class="col-sm-12">
         <h4>Recent Knowledge Base Articles</h4>
-    {% for entry in recent_articles %}
         <div class="row">
-            <div class="col-sm-12">
-                <div>{{ entry.created_at|naturaltime }}</div>
-                <div><h5>{{ entry.title }}</h5></a></div>
-                <div>{{ entry.content }}</div>
-                <div>{% make_labels entry.topics %}</div>
+        {% for entry in recent_articles %}
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ entry.title }}</div>
+                    <div class="panel-body">
+                        {{ entry.content|truncatewords_html:25 }}
+                        <div>
+                            <a href="{% url 'article_show' entry.pk %}">Read more</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>        
-    {% endfor %}
+        {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

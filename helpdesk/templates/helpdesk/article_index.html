@@ -11,10 +11,27 @@
 
 <div class="row">
     <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-8">
+                <strong>Title</strong>
+            </div>
+            <div class="col-sm-2">
+                <strong>Updated</strong>
+            </div>
+            <div class="col-sm-2">
+                <strong>Created</strong>
+            </div>
+        </div>
         {% for article in recent_articles %}
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-8">
                     <a href="{% url 'article_show' article.pk %}"><h5>{{ article.title }}</h5></a>
+                </div>
+                <div class="col-sm-2">
+                    {{ article.updated_at|naturaltime }}
+                </div>
+                <div class="col-sm-2">
+                    {{ article.created_at|naturaltime }}
                 </div>
             </div>
         {% endfor %}

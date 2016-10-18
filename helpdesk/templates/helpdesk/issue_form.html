@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block content %}
 <div class="row">
@@ -8,22 +9,33 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-8">
         <form action="#" method="post">
             {% csrf_token %}
 
             {% for field in form %}
-                <div class="formgroup">
+                <div class="form-group">
                     <label>{{ field.label }}</label>
-                    {{ field }}
+                    {{ field|add_class:'form-control' }}
                 </div>
             {% endfor %}
 
-            <div class="formgroup">
+            <div class="formactions">
                 <button type="submit" class="btn btn-success">Save</button>
                 <button type="reset" class="btn btn-default">Cancel</button>
             </div>
         </form>
+    </div>
+    <div class="col-sm-4">
+        Try to be as <strong>specific</strong> as possible when creating a new issue,
+        describing <strong>what</strong> you experienced and <strong>where</strong> is
+        often very helpfull.<br>
+        Answering the following will make a good issue report
+        <ul>
+            <li>What did you experience</li>
+            <li>Where were you (URL)</li>
+        </ul>
+        Using <strong>ALL CAPS</strong> doesn't affect how fast your issue gets resolved.
     </div>
 </div>
 {% endblock %}

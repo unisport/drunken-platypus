@@ -55,7 +55,7 @@ class ChangeLog(models.Model):
 
     @staticmethod
     def most_recent():
-        return ChangeLog.objects.order_by('-created_at')[0:5]
+        return ChangeLog.objects.order_by('-created_at')[0:4]
 
 class Article(models.Model):
     title = models.CharField(max_length=255)
@@ -69,7 +69,7 @@ class Article(models.Model):
 
     @staticmethod
     def most_recent():
-        return Article.objects.filter(pinned=False).order_by('-created_at')[0:5]
+        return Article.objects.filter(pinned=False).order_by('-created_at')[0:4]
 
     @staticmethod
     def most_recent_by_pinned():
@@ -77,7 +77,7 @@ class Article(models.Model):
 
     @staticmethod
     def pinned_articles():
-        return Article.objects.filter(pinned=True).order_by('-created_at')[0:5]
+        return Article.objects.filter(pinned=True).order_by('-created_at')[0:2]
 
 # ModelForms
 class ArticleForm(ModelForm):
