@@ -21,7 +21,7 @@
         </div>
         <div class="col-sm-8">
             <strong>By: {{ article.author }}</strong><br>
-            {{ article.content }}
+            {{ article.content|linebreaksbr }}
             <div class="row">
                 <div class="col-sm-12">
                     <a class="btn btn-primary" href="{% url 'article_edit' article.pk %}">Edit</a>

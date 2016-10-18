@@ -14,9 +14,8 @@
     <div class="col-sm-12">
         <div class="alert alert-info" role="alert">
             <h5><span class="glyphicon glyphicon-pushpin"></span> {{ article.title }}</h5>
-            {{ article.content }}
-            <a href="{% url 'article_show' article.pk %}">Read more</a><br>
-            Topics: {% make_labels article.topics %}
+            {{ article.content|truncatewords_html:25 }}
+            <a href="{% url 'article_show' article.pk %}">Read more</a>
         </div>
     </div>
 </div>
@@ -59,7 +58,7 @@
         {% for entry in recent_changelogentries %}
             <div class="col-sm-4">
                 <div><span class="label label-default">Created: {{ entry.created_at|naturaltime }}</span></div>
-                <div>{{ entry.summary }}</div>
+                <div>{{ entry.summary|linebreaksbr }}</div>
             </div>
         {% endfor %}
         </div>
