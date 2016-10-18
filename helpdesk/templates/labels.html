@@ -1,3 +1,4 @@
 {% for label in labels %}
-    <a href="/helpdesk/kb/topic/{{ label|urlencode }}/">{{ label }}</a>
+    <!--<a href="/helpdesk/kb/topic/{{ label|urlencode }}/">{{ label }}</a>//-->
+    <span class="label label-default">{{ label }}</span>
 {% endfor %}
