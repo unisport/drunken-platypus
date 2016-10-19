@@ -33,7 +33,7 @@
             <div class="col-sm-2"><h4>Replies</h4></div>
         </div>
     {% for issue in recent_issues %}
-        <div class="row" style="margin-bottom: 10px">
+        <div class="row issue-status-{{ issue.status|lower }}" style="margin-bottom: 10px">
             <div class="col-sm-4">
                 <a href="{% url 'issue_show' issue.pk %}">{{ issue.title|truncatewords:10 }}</a><br>
                 {{ issue.summary|truncatewords_html:10 }}
