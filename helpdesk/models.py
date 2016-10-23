@@ -8,13 +8,14 @@ import sys
 
 logger = logging.getLogger(__name__)
 
+
 # Models
-class Issue( models.Model):
+class Issue(models.Model):
     OPEN = 'OPEN'
     RESOLVED = 'RESOLVED'
     REOPENED = 'REOPENED'
     ONHOLD = 'ONHOLD'
-    
+
     STATUS_CHOICES = (
         (OPEN, 'Open'),
         (RESOLVED, 'Resolved'),
@@ -29,9 +30,9 @@ class Issue( models.Model):
     # FIXME: Should be logged in user
     author = models.CharField(max_length=100)
     status = models.CharField(
-        choices = STATUS_CHOICES,
-        default = OPEN,
-        max_length = 100
+        choices=STATUS_CHOICES,
+        default=OPEN,
+        max_length=100
     )
 
     def comments(self):
@@ -46,6 +47,7 @@ class Issue( models.Model):
         # FIXME: Add the correct filtering
         return Issue.objects.filter().order_by('-created_at')
 
+
 class UserActionHistory(models.Model):
     author = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -53,12 +55,14 @@ class UserActionHistory(models.Model):
     fk = models.IntegerField(default=0)
     model_kind = models.CharField(max_length=100)
 
+
 class Comment(models.Model):
     summary = models.TextField()
     # FIXME: Should be logged in user
     author = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     issue = models.ForeignKey(Issue)
+
 
 class ChangeLog(models.Model):
     summary = models.TextField()
@@ -69,6 +73,7 @@ class ChangeLog(models.Model):
     @staticmethod
     def most_recent():
         return ChangeLog.objects.order_by('-created_at')[0:4]
+
 
 class Article(models.Model):
     title = models.CharField(max_length=255)
@@ -100,13 +105,14 @@ def create_virgin_fields(sender, instance, **kwargs):
     track_fields = ('title', 'summary', 'status')
     for field in track_fields:
         cached_values[field] = getattr(instance, field)
-    
+
     if getattr(instance, 'pk') is None:
         setattr(sender, 'is_virgin', True)
     else:
         setattr(sender, 'is_virgin', False)
 
     setattr(sender, 'track_fields', cached_values)
+
 
 @receiver(post_save, sender=Issue, dispatch_uid='store_model_history')
 def store_model_history(sender, instance, **kwards):
@@ -117,7 +123,8 @@ def store_model_history(sender, instance, **kwards):
             instance.__class__.__name__
             )
         user_action = UserActionHistory(entry=message, author=instance.author,
-            fk=instance.pk, model_kind=instance.__class__.__name__)
+                                        fk=instance.pk,
+                                        model_kind=instance.__class__.__name__)
 
         user_action.save()
     else:
@@ -133,11 +140,13 @@ def store_model_history(sender, instance, **kwards):
                             instance.track_fields[field],
                             getattr(instance, field)
                         )
-                user_action = UserActionHistory(entry=message, author=instance.author,
-                    fk=instance.pk, model_kind=instance.__class__.__name__)
-    
+                user_action = UserActionHistory(entry=message,
+                                                author=instance.author,
+                                                fk=instance.pk,
+                                                model_kind=instance.__class__.__name__)
+
                 user_action.save()
-        
+
 
 # ModelForms
 class ArticleForm(ModelForm):
@@ -146,17 +155,20 @@ class ArticleForm(ModelForm):
         fields = ['title', 'content', 'topics', 'pinned']
         fields_required = ['title', 'content']
 
+
 class IssueForm(ModelForm):
     class Meta:
         model = Issue
         fields = ['title', 'summary', 'status']
         fields_required = ['title', 'summary']
 
+
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ['summary']
         fields_required = ['summary']
+
 
 class ChangeLogForm(ModelForm):
     class Meta:

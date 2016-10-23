@@ -61,6 +61,12 @@
                 .addClass(c.join(' '))
                 .html(m)
                 .prependTo(f);
+
+                $('[role="alert"]').animate({
+                    opacity: 0.0
+                }, 5000, function() {
+                    // Nothing to see here
+                });
             })
         });
     })(jQuery);

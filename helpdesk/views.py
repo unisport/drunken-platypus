@@ -71,16 +71,11 @@ def comment_create(request, issue_id):
         comment = form.save(commit=False)
         comment.issue = issue
         comment.save()
+        return JsonResponse({'success': True})
     else:
-        """
-        Future me should implement the submit using ajax
         return JsonResponse({'success': False,
-                      'errors': [(k, v[0]) for k, v in form.errors.items()]})
-        will return the error in a Json format
-        """
-        raise Exception('You have issues man!')
-
-    return redirect('issue_show', issue_id)
+            'errors': [(k, v[0]) for k, v in form.errors.items()]
+        })
 
 def changelog_new(request):
     if request.method == 'POST':
