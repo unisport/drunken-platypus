@@ -7,7 +7,6 @@ from .models import CommentForm, ChangeLogForm, ArticleForm, UserActionHistory
 
 
 def issue_index(request):
-    # Here we show a list of open issues
     recent_issues = Issue().most_recent()
     recent_changelogentries = ChangeLog().most_recent()
     recent_articles = Article().most_recent()
@@ -22,7 +21,6 @@ def issue_index(request):
 
 
 def issue_show(request, issue_id):
-    # Show a single issue
     issue = get_object_or_404(Issue, pk=issue_id)
     form = CommentForm
     issue_history = UserActionHistory.objects.filter(fk=issue_id).order_by('-created_at')
@@ -33,23 +31,17 @@ def issue_show(request, issue_id):
 
 
 def issue_create(request):
-    # Show the form to create an issue
     form = IssueForm
 
     if request.method == 'POST':
         form = IssueForm(request.POST)
         if form.is_valid():
             form.save()
-        else:
-            """
-            Future me should implement the submit using ajax
-            return JsonResponse({'success': False,
-                          'errors': [(k, v[0]) for k, v in form.errors.items()]})
-            will return the error in a Json format
-            """
-            raise Exception('You have issues')
 
-        return redirect('issue_index')
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False,
+                        'errors': [(k, v[0]) for k, v in form.errors.items()]})
 
     return render(request, 'helpdesk/issue_form.html', {'form': form})
 

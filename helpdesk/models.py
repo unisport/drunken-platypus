@@ -101,6 +101,10 @@ class Article(models.Model):
 # Signals
 @receiver(post_init, sender=Issue, dispatch_uid='create_virgin_fields')
 def create_virgin_fields(sender, instance, **kwargs):
+    """This function adds a property to the model that stores the original
+    values when instantiated or fetched from the database. If the model has no
+    PK the property is_vigin is set to True
+    """
     cached_values = {}
     track_fields = ('title', 'summary', 'status')
     for field in track_fields:
@@ -116,6 +120,10 @@ def create_virgin_fields(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Issue, dispatch_uid='store_model_history')
 def store_model_history(sender, instance, **kwards):
+    """This function checks if the model is created or if changes have been
+        made to an exising model. It's only the value of status that is stored
+        as part of the message
+    """
     track_fields = ('title', 'summary', 'status')
 
     if getattr(sender, 'is_virgin') is True:
