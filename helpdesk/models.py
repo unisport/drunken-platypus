@@ -1,5 +1,12 @@
 from django.db import models
+from django.db.models.signals import post_init, post_save
+from django.dispatch import receiver
 from django.forms import ModelForm
+
+import logging
+import sys
+
+logger = logging.getLogger(__name__)
 
 # Models
 class Issue( models.Model):
@@ -21,7 +28,6 @@ class Issue( models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     # FIXME: Should be logged in user
     author = models.CharField(max_length=100)
-    kb = models.BooleanField(default=False)
     status = models.CharField(
         choices = STATUS_CHOICES,
         default = OPEN,
@@ -39,6 +45,13 @@ class Issue( models.Model):
     def most_recent():
         # FIXME: Add the correct filtering
         return Issue.objects.filter().order_by('-created_at')
+
+class UserActionHistory(models.Model):
+    author = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    entry = models.CharField(max_length=255)
+    fk = models.IntegerField(default=0)
+    model_kind = models.CharField(max_length=100)
 
 class Comment(models.Model):
     summary = models.TextField()
@@ -78,6 +91,53 @@ class Article(models.Model):
     @staticmethod
     def pinned_articles():
         return Article.objects.filter(pinned=True).order_by('-created_at')[0:2]
+
+
+# Signals
+@receiver(post_init, sender=Issue, dispatch_uid='create_virgin_fields')
+def create_virgin_fields(sender, instance, **kwargs):
+    cached_values = {}
+    track_fields = ('title', 'summary', 'status')
+    for field in track_fields:
+        cached_values[field] = getattr(instance, field)
+    
+    if getattr(instance, 'pk') is None:
+        setattr(sender, 'is_virgin', True)
+    else:
+        setattr(sender, 'is_virgin', False)
+
+    setattr(sender, 'track_fields', cached_values)
+
+@receiver(post_save, sender=Issue, dispatch_uid='store_model_history')
+def store_model_history(sender, instance, **kwards):
+    track_fields = ('title', 'summary', 'status')
+
+    if getattr(sender, 'is_virgin') is True:
+        message = 'created a new {}'.format(
+            instance.__class__.__name__
+            )
+        user_action = UserActionHistory(entry=message, author=instance.author,
+            fk=instance.pk, model_kind=instance.__class__.__name__)
+
+        user_action.save()
+    else:
+        for field in track_fields:
+            if getattr(instance, field) != instance.track_fields[field]:
+                if field != 'status':
+                    message = 'changed {}'.format(
+                            field
+                        )
+                else:
+                    message = 'changed {} from {} to {}'.format(
+                            field,
+                            instance.track_fields[field],
+                            getattr(instance, field)
+                        )
+                user_action = UserActionHistory(entry=message, author=instance.author,
+                    fk=instance.pk, model_kind=instance.__class__.__name__)
+    
+                user_action.save()
+        
 
 # ModelForms
 class ArticleForm(ModelForm):

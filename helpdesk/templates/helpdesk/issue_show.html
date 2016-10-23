@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-sm-2">
                 By: Author<br>
-                Created: {{ issue.created_at|naturaltime}}
+                Created: {{ issue.created_at|naturaltime }}
             </div>
             <div class="col-sm-10">
                 {{ issue.summary|linebreaksbr }}
@@ -25,6 +25,15 @@
             </div>    
         </div>
         <hr>
+        {% if history %}
+            {% for log in history %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <span class="label label-success">{{ log.created_at|naturaltime }}</span> {{ log.author }} {{ log.entry }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 
@@ -73,13 +82,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    (function() {
-        document.querySelector('[data-action="edit"]').addEventListener('click', function(event) {
-            event.preventDefault();
-            document.location = "{% url 'issue_edit' issue.id %}";
-        });
-    })();
-</script>
 {% endblock %}

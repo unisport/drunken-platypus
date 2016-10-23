@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 import logging
 
-from .models import Issue, Comment, ChangeLog, Article, IssueForm, CommentForm, ChangeLogForm, ArticleForm
+from .models import Issue, Comment, ChangeLog, Article, IssueForm, CommentForm, ChangeLogForm, ArticleForm, UserActionHistory
 
 def issue_index(request):
     # Here we show a list of open issues
@@ -22,8 +22,9 @@ def issue_show(request, issue_id):
     # Show a single issue
     issue = get_object_or_404(Issue, pk=issue_id)
     form = CommentForm
+    issue_history = UserActionHistory.objects.filter(fk=issue_id).order_by('-created_at')
 
-    return render(request, 'helpdesk/issue_show.html', {'issue': issue, 'form': form})
+    return render(request, 'helpdesk/issue_show.html', {'issue': issue, 'form': form, 'history': issue_history})
 
 def issue_create(request):
     # Show the form to create an issue

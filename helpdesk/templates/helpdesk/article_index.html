@@ -23,9 +23,10 @@
             </div>
         </div>
         {% for article in recent_articles %}
-            <div class="row">
+            <div class="row" style="margin-bottom: 10px">
                 <div class="col-sm-8">
-                    <a href="{% url 'article_show' article.pk %}"><h5>{{ article.title }}</h5></a>
+                    <a href="{% url 'article_show' article.pk %}">{{ article.title }}</a><br>
+                    {{ article.content|truncatewords_html:10 }}
                 </div>
                 <div class="col-sm-2">
                     {{ article.updated_at|naturaltime }}
