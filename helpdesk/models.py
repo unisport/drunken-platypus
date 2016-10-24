@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.signals import post_init, post_save
 from django.dispatch import receiver
 from django.forms import ModelForm
+from django.contrib.auth.models import User
 
 
 # Models
@@ -22,8 +23,7 @@ class Issue(models.Model):
     summary = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # FIXME: Should be logged in user
-    author = models.CharField(max_length=100)
+    author = models.ForeignKey(User)
     status = models.CharField(
         choices=STATUS_CHOICES,
         default=OPEN,
@@ -44,7 +44,7 @@ class Issue(models.Model):
 
 
 class UserActionHistory(models.Model):
-    author = models.CharField(max_length=100)
+    author = models.ForeignKey(User)
     created_at = models.DateTimeField(auto_now_add=True)
     entry = models.CharField(max_length=255)
     fk = models.IntegerField(default=0)
@@ -53,8 +53,7 @@ class UserActionHistory(models.Model):
 
 class Comment(models.Model):
     summary = models.TextField()
-    # FIXME: Should be logged in user
-    author = models.CharField(max_length=100)
+    author = models.ForeignKey(User)
     created_at = models.DateTimeField(auto_now_add=True)
     issue = models.ForeignKey(Issue)
 
@@ -62,8 +61,7 @@ class Comment(models.Model):
 class ChangeLog(models.Model):
     summary = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    # FIXME: Has to be logged in user instead
-    author = models.CharField(max_length=100)
+    author = models.ForeignKey(User)
 
     @staticmethod
     def most_recent():
@@ -75,8 +73,7 @@ class Article(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # FIXME: Make this a real user
-    author = models.CharField(max_length=100)
+    author = models.ForeignKey(User)
     topics = models.CharField(max_length=255)
     pinned = models.BooleanField(default=False)
 
@@ -86,7 +83,7 @@ class Article(models.Model):
 
     @staticmethod
     def most_recent_by_pinned():
-        return Article.objects.order_by('-created_at')
+        return Article.objects.order_by('-pinned', '-created_at')
 
     @staticmethod
     def pinned_articles():

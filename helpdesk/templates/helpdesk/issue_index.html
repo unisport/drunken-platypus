@@ -38,12 +38,13 @@
                 <a href="{% url 'issue_show' issue.pk %}">{{ issue.title|truncatewords:10 }}</a><br>
                 {{ issue.summary|truncatewords_html:10 }}
             </div>
-            <div class="col-sm-2">{{ issue.author }}</div>
+            <div class="col-sm-2">{{ issue.author.email }}</div>
             <div class="col-sm-2">{{ issue.status }}</div>
             <div class="col-sm-2">{{ issue.created_at|naturaltime }}</div>
             <div class="col-sm-2">
                 {% if issue.comment_count > 0 %}
                     {{ issue.comment_count }}
+                    <span class="glyphicon glyphicon-comment"></span>
                 {% endif %}
             </div>
         </div>
