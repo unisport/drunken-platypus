@@ -8,14 +8,12 @@ from django.contrib.auth.models import User
 # Models
 class Issue(models.Model):
     OPEN = 'OPEN'
-    RESOLVED = 'RESOLVED'
-    REOPENED = 'REOPENED'
+    CLOSED = 'CLOSED'
     ONHOLD = 'ONHOLD'
 
     STATUS_CHOICES = (
         (OPEN, 'Open'),
-        (RESOLVED, 'Resolved'),
-        (REOPENED, 'Reopened'),
+        (CLOSED, 'Closed'),
         (ONHOLD, 'On Hold')
     )
 
