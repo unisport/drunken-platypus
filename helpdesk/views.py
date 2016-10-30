@@ -76,18 +76,19 @@ def issue_edit(request, issue_id):
 
 @login_required
 def comment_create(request, issue_id):
-    issue = get_object_or_404(Issue, pk=issue_id)
-    form = CommentForm(request.POST)
-    if form.is_valid():
-        comment = form.save(commit=False)
-        comment.issue = issue
-        comment.author = request.user
-        comment.save()
-        return JsonResponse({'success': True})
-    else:
-        return JsonResponse({'success': False,
-            'errors': [(k, v[0]) for k, v in form.errors.items()]
-        })
+    if request.method == 'POST':
+        issue = get_object_or_404(Issue, pk=issue_id)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.issue = issue
+            comment.author = request.user
+            comment.save()
+
+            return redirect('issue_show', issue.pk)
+        else:
+            # TODO: should display issue_form with error messages
+            return render(request, 'helpdesk/issue_show.html')
 
 
 @login_required
